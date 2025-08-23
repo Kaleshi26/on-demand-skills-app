@@ -1,6 +1,17 @@
-FROM node:18
+# backend/Dockerfile
+FROM node:18-alpine
 WORKDIR /app
-COPY package.json .
-RUN npm install
+
+
+# Install deps first for better layer caching
+COPY package*.json ./
+RUN npm install --omit=dev
+
+
+# Copy source
 COPY . .
-CMD ["npm", "start"]
+
+
+ENV NODE_ENV=production
+EXPOSE 5000
+CMD ["node", "src/index.js"]
