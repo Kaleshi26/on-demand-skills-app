@@ -1,0 +1,8 @@
+{
+  "name": "skills-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "echo \"React app placeholder\""
+  }
+}
