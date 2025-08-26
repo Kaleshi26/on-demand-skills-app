@@ -4,6 +4,10 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import morgan from 'morgan';
 
+import authRoutes from './routes/auth.js';
+import serviceRoutes from './routes/services.js';
+import bookingRoutes from './routes/bookings.js';
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo:27017/skillsapp';
@@ -16,13 +20,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
+app.use('/api/auth', authRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/bookings', bookingRoutes);
+
 async function start() {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('✅ MongoDB connected');
     app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));
   } catch (err) {
-    console.error('❌ Failed to start server:', err);
+    console.error('❌ Server start failed:', err);
     process.exit(1);
   }
 }
