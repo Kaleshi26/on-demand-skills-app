@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+:root { color-scheme: light; }
 body {
   font-family: sans-serif;
   background: #f8fafc;
