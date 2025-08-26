@@ -14,6 +14,7 @@ services:
     container_name: skills-backend
     environment:
       - PORT=5000
+      - JWT_SECRET=supersecret_dev_key
       - MONGO_URI=mongodb://mongo:27017/skillsapp
     ports:
       - "5000:5000"
