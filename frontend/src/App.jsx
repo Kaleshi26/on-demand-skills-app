@@ -1,17 +1,43 @@
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Footer from "./components/Footer";
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import Home from './pages/Home.jsx';
+import Browse from './pages/Browse.jsx';
+import ServiceDetail from './pages/ServiceDetail.jsx';
+import NewService from './pages/NewService.jsx';
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 
-function App() {
+export default function App() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <main className="flex-grow">
-        <Hero />
+    <div className="min-h-screen flex flex-col">
+      <nav className="bg-blue-600 text-white">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link to="/" className="font-bold">On‑Demand Skills</Link>
+          <div className="space-x-4">
+            <Link to="/browse" className="hover:underline">Browse</Link>
+            <Link to="/new-service" className="hover:underline">Post a Service</Link>
+            <Link to="/dashboard" className="hover:underline">Dashboard</Link>
+            <Link to="/login" className="hover:underline">Login</Link>
+            <Link to="/signup" className="hover:underline">Sign up</Link>
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/browse" element={<Browse />} />
+          <Route path="/services/:id" element={<ServiceDetail />} />
+          <Route path="/new-service" element={<NewService />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
       </main>
-      <Footer />
+
+      <footer className="bg-gray-100 text-center py-4 text-sm">
+        © {new Date().getFullYear()} On‑Demand Skills
+      </footer>
     </div>
   );
 }
-
-export default App;
