@@ -12,12 +12,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://mongo:27017/skillsapp';
 
-app.use(cors());
+app.use(cors()); // allow all origins for dev
 app.use(express.json());
 app.use(morgan('dev'));
 
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+  res.json({
+    status: 'ok',
+    db: states[mongoose.connection.readyState] || mongoose.connection.readyState,
+    time: new Date().toISOString(),
+  });
 });
 
 app.use('/api/auth', authRoutes);
@@ -28,9 +33,9 @@ async function start() {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('✅ MongoDB connected');
-    app.listen(PORT, () => console.log(`✅ API running on http://localhost:${PORT}`));
+    app.listen(PORT, () => console.log(`✅ API http://localhost:${PORT}`));
   } catch (err) {
-    console.error('❌ Server start failed:', err);
+    console.error('❌ Failed to start:', err);
     process.exit(1);
   }
 }

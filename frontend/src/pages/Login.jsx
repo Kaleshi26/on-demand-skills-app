@@ -1,3 +1,4 @@
+// frontend/src/pages/Login.jsx
 import { useState } from 'react';
 import api, { setAuth } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +10,15 @@ export default function Login() {
   const nav = useNavigate();
 
   async function submit() {
+    setMsg('');
     try {
       const { data } = await api.post('/auth/login', { email, password });
       setAuth(data.token);
       setMsg('Logged in!');
       nav('/');
-    } catch {
-      setMsg('Login failed');
+    } catch (err) {
+      const message = err.response?.data?.message || err.message || 'Login failed';
+      setMsg(message);
     }
   }
 
@@ -26,7 +29,7 @@ export default function Login() {
         <input placeholder="Email" className="border p-2 rounded" value={email} onChange={e=>setEmail(e.target.value)} />
         <input placeholder="Password" type="password" className="border p-2 rounded" value={password} onChange={e=>setPassword(e.target.value)} />
         <button onClick={submit} className="px-4 py-2 bg-blue-600 text-white rounded">Login</button>
-        {msg && <p>{msg}</p>}
+        {msg && <p className="text-red-600 mt-2">{msg}</p>}
       </div>
     </div>
   );
