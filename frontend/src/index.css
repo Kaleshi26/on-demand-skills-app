@@ -1,9 +1,17 @@
+/* frontend/src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root { color-scheme: light; }
-body {
-  font-family: sans-serif;
-  background: #f8fafc;
-}
+body { @apply bg-slate-50 text-slate-900; }
+
+/* Utilities */
+.container-max { @apply max-w-7xl mx-auto px-4; }
+.card { @apply bg-white rounded-2xl shadow-soft border border-slate-100; }
+.btn { @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-semibold; }
+.btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; }
+.btn-secondary { @apply btn bg-slate-900 text-white hover:bg-slate-800; }
+.btn-ghost { @apply btn bg-white border border-slate-200 hover:bg-slate-50; }
+.badge { @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium; }
+.badge-brand { @apply badge bg-brand-100 text-brand-800; }
