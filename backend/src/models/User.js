@@ -1,3 +1,4 @@
+// backend/src/models/User.js
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
@@ -8,7 +9,10 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ['customer', 'provider', 'admin'], default: 'customer' },
     location: String,
-    skills: [{ type: String }]
+    skills: [{ type: String }],
+    avatar: String,
+    bio: String,
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }]
   },
   { timestamps: true }
 );
