@@ -1,9 +1,10 @@
 // frontend/src/pages/Signup.jsx
 import { useState } from 'react';
-import api, { setAuth } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Signup() {
+  const { signup } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,9 +15,7 @@ export default function Signup() {
   async function submit() {
     setMsg('');
     try {
-      const { data } = await api.post('/auth/register', { name, email, password, role });
-      setAuth(data.token);
-      setMsg('Registered!');
+      await signup({ name, email, password, role });
       nav('/');
     } catch (err) {
       const message = err.response?.data?.message || err.message || 'Signup failed';
