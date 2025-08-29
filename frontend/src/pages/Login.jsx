@@ -1,9 +1,10 @@
 // frontend/src/pages/Login.jsx
 import { useState } from 'react';
-import api, { setAuth } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Login() {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
@@ -12,9 +13,7 @@ export default function Login() {
   async function submit() {
     setMsg('');
     try {
-      const { data } = await api.post('/auth/login', { email, password });
-      setAuth(data.token);
-      setMsg('Logged in!');
+      await login(email, password);
       nav('/');
     } catch (err) {
       const message = err.response?.data?.message || err.message || 'Login failed';
