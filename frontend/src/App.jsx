@@ -8,6 +8,7 @@ import NewService from './pages/NewService.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import BecomeProvider from './pages/BecomeProvider.jsx';
 
 export default function App() {
   const { user, ready, logout } = useAuth();
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/become-a-provider" element={<BecomeProvider />} />
         </Routes>
       </main>
 
