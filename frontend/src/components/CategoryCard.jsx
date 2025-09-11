@@ -1,4 +1,5 @@
 // frontend/src/components/CategoryCard.jsx
+
 import { Link } from 'react-router-dom';
 
 export default function CategoryCard({ name, image }) {
