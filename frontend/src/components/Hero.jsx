@@ -1,4 +1,4 @@
-
+// frontend/src/components/Hero.jsx
 function Hero() {
   return (
     <section className="flex flex-col items-center justify-center text-center py-20 bg-gray-100">
