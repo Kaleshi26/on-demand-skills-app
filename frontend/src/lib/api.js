@@ -1,4 +1,4 @@
-
+// frontend/src/lib/api.js
 import axios from 'axios';
 
 // Same-origin via Nginx proxy (frontend container proxies /api -> backend:5000)
