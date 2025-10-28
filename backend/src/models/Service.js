@@ -9,7 +9,10 @@ const serviceSchema = new mongoose.Schema(
     category: { type: String, required: true },
     price: { type: Number, required: true, min: 0 },
     rating: { type: Number, default: 0 },
-    tags: [{ type: String }]
+    tags: [{ type: String }],
+    coverImage: String,
+    availabilityText: String,
+    isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );

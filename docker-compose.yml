@@ -17,11 +17,19 @@ services:
       - PORT=5000
       - JWT_SECRET=supersecret_dev_key
       - MONGO_URI=mongodb://mongo:27017/skillsapp
+      - FRONTEND_URL=http://localhost:3000
+      - NODE_ENV=development
+      # Uncomment and configure these for production:
+      # - STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+      # - STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+      # - CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name
     ports:
       - "5000:5000"
     depends_on:
       - mongo
     restart: unless-stopped
+    volumes:
+      - ./backend/uploads:/app/uploads
 
   frontend:
     build: ./frontend
@@ -30,6 +38,15 @@ services:
       - "3000:80"
     depends_on:
       - backend
+    restart: unless-stopped
+
+  # Optional: Mailpit for email testing
+  mailpit:
+    image: axllent/mailpit
+    container_name: skills-mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
     restart: unless-stopped
 
 volumes:

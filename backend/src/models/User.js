@@ -12,7 +12,19 @@ const userSchema = new mongoose.Schema(
     skills: [{ type: String }],
     avatar: String,
     bio: String,
-    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }]
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Service' }],
+    // Extended provider fields
+    hourlyRate: { type: Number, min: 0 },
+    categories: [{ type: String }],
+    address: String,
+    availabilityText: String,
+    verified: {
+      idVerified: { type: Boolean, default: false },
+      backgroundChecked: { type: Boolean, default: false }
+    },
+    portfolioImages: [{ type: String }],
+    rating: { type: Number, default: 0 },
+    reviewCount: { type: Number, default: 0 }
   },
   { timestamps: true }
 );
