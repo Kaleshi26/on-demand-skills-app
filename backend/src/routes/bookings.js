@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import { createBooking, myBookings, updateStatus } from '../controllers/bookingController.js';
 import { protect } from '../middleware/auth.js';
