@@ -40,7 +40,7 @@ router.post('/task/:id',
 
 router.patch('/:id/status',
   writeLimiter,
-  updateOfferStatusValidation,
+  updateOfferStatusValidation,  // Validation middleware
   handleValidationErrors,
   updateOfferStatus
 );
