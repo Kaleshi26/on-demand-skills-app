@@ -1,4 +1,5 @@
 // backend/src/utils/stripe.js
+// Utility functions for Stripe payment processing
 import Stripe from 'stripe';
 
 let stripe = null;
