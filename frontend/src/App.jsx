@@ -1,4 +1,5 @@
 // frontend/src/App.jsx
+// Main application component with routing and navigation
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext.jsx';
 import Home from './pages/Home.jsx';
