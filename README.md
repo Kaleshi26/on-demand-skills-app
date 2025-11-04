@@ -1,6 +1,6 @@
 # On‑Demand Skills App (MERN + Docker)
 
-A complete TaskRabbit-style marketplace for connecting customers with local service providers. Built with modern web technologies and containerized for easy deployment.
+A complete service marketplace platform for connecting customers with local service providers. Built with modern web technologies and containerized for easy deployment.
 
 ## 🚀 Features
 
