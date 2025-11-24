@@ -1,13 +1,21 @@
-// backend/src/routes/auth.js
-import { Router } from 'express';
-import { register, login, me, updateMe, becomeProvider, myFavorites } from '../controllers/authController.js';
-import { protect } from '../middleware/auth.js';
+import express from 'express';
+import {
+  register,
+  login,
+  me,
+  updateMe,
+  becomeProvider,
+  myFavorites,
+} from '../controllers/authController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
-const router = Router();
+const router = express.Router();
+
 router.post('/register', register);
 router.post('/login', login);
-router.get('/me', protect, me);
-router.put('/me', protect, updateMe);
-router.post('/become-provider', protect, becomeProvider);
-router.get('/me/favorites', protect, myFavorites);
+router.get('/me', authMiddleware, me);
+router.put('/me', authMiddleware, updateMe);
+router.post('/become-provider', authMiddleware, becomeProvider);
+router.get('/favorites', authMiddleware, myFavorites);
+
 export default router;
