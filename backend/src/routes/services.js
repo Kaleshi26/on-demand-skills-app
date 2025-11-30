@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { createService, listServices, getService, } from '../controllers/serviceController.js';
 import { toggleFavorite } from '../controllers/serviceController.js';
 import { createReview, listReviews } from '../controllers/reviewController.js';
-import { protect, authorize } from '../middleware/auth.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = Router();
 router.get('/', listServices);
