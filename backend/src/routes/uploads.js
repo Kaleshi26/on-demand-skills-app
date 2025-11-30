@@ -1,6 +1,6 @@
 // backend/src/routes/uploads.js
 import { Router } from 'express';
-import { protect } from '../middleware/auth.js';
+import { protect } from '../middleware/authMiddleware.js';
 import { writeLimiter } from '../middleware/rateLimit.js';
 import {
   uploadSingle,
