@@ -1,7 +1,7 @@
 // backend/src/routes/payments.js
 import { Router } from 'express';
 import { body } from 'express-validator';
-import { protect } from '../middleware/auth.js';
+import { protect } from '../middleware/authMiddleware.js';
 import { handleValidationErrors, sanitizeBody } from '../middleware/validate.js';
 import { writeLimiter } from '../middleware/rateLimit.js';
 import {
