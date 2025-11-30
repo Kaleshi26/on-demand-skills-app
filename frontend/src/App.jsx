@@ -1,11 +1,11 @@
-// Main application component
 import { Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast'; // Notification system
+import { Toaster } from 'react-hot-toast'; 
 
-// Components
+// Components (FIXED: Added .jsx extension)
 import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
 
-// Pages
+// Pages (FIXED: Added .jsx extension)
 import Home from './pages/Home.jsx';
 import Browse from './pages/Browse.jsx';
 import ServiceDetail from './pages/ServiceDetail.jsx';
@@ -25,14 +25,14 @@ import Favorites from './pages/Favorites.jsx';
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-sans text-gray-900">
-      {/* 1. Global Toast Notifications */}
+      {/* 1. Notifications */}
       <Toaster position="top-center" reverseOrder={false} />
 
-      {/* 2. Professional Navbar */}
+      {/* 2. Navigation */}
       <Navbar />
 
-      {/* 3. Main Content Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 sm:px-6 lg:px-8 py-8">
+      {/* 3. Main Content - Pushes Footer down */}
+      <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
@@ -53,14 +53,8 @@ export default function App() {
         </Routes>
       </main>
 
-      {/* 4. Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-auto">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-500">
-            © {new Date().getFullYear()} On‑Demand Skills. Built for Modern Web.
-          </p>
-        </div>
-      </footer>
+      {/* 4. The New Footer Component */}
+      <Footer />
     </div>
   );
 }
