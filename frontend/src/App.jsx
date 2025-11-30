@@ -1,7 +1,11 @@
-// frontend/src/App.jsx
-// Main application component with routing and navigation
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext.jsx';
+// Main application component
+import { Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast'; // Notification system
+
+// Components
+import Navbar from './components/Navbar.jsx';
+
+// Pages
 import Home from './pages/Home.jsx';
 import Browse from './pages/Browse.jsx';
 import ServiceDetail from './pages/ServiceDetail.jsx';
@@ -19,62 +23,16 @@ import Profile from './pages/Profile.jsx';
 import Favorites from './pages/Favorites.jsx';
 
 export default function App() {
-  const { user, ready, logout } = useAuth();
-  const nav = useNavigate();
-
-  function handleLogout() {
-    logout();
-    nav('/');
-  }
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <nav className="bg-blue-600 text-white">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="font-bold">On‑Demand Skills</Link>
+    <div className="min-h-screen flex flex-col bg-gray-50 font-sans text-gray-900">
+      {/* 1. Global Toast Notifications */}
+      <Toaster position="top-center" reverseOrder={false} />
 
-          {!ready ? (
-            <div className="opacity-80">Loading…</div>
-          ) : user ? (
-            <div className="flex items-center gap-4">
-              <Link to="/browse" className="hover:underline">Browse</Link>
-              <Link to="/tasks" className="hover:underline">Tasks</Link>
-              {user.role === 'provider' && (
-                <Link to="/new-service" className="hover:underline">Post Service</Link>
-              )}
-              <Link to="/tasks/new" className="hover:underline">Post Task</Link>
-              <Link to="/inbox" className="hover:underline">Messages</Link>
-              <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-              <div className="relative group">
-                <button className="flex items-center gap-2 hover:underline">
-                  <span className="opacity-90">Hi, {user.name}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="py-1">
-                    <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</Link>
-                    <Link to="/favorites" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Favorites</Link>
-                    <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="space-x-4">
-              <Link to="/browse" className="hover:underline">Browse</Link>
-              <Link to="/tasks" className="hover:underline">Tasks</Link>
-              <Link to="/login" className="hover:underline">Login</Link>
-              <Link to="/signup" className="hover:underline">Sign up</Link>
-            </div>
-          )}
-        </div>
-      </nav>
+      {/* 2. Professional Navbar */}
+      <Navbar />
 
-      <main className="flex-1">
+      {/* 3. Main Content Area */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-4 sm:px-6 lg:px-8 py-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
@@ -95,8 +53,13 @@ export default function App() {
         </Routes>
       </main>
 
-      <footer className="bg-gray-100 text-center py-4 text-sm">
-        © {new Date().getFullYear()} On‑Demand Skills
+      {/* 4. Footer */}
+      <footer className="bg-white border-t border-gray-200 mt-auto">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm text-gray-500">
+            © {new Date().getFullYear()} On‑Demand Skills. Built for Modern Web.
+          </p>
+        </div>
       </footer>
     </div>
   );
