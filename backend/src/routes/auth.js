@@ -7,15 +7,18 @@ import {
   becomeProvider,
   myFavorites,
 } from '../controllers/authController.js';
-import authMiddleware from '../middleware/authMiddleware.js';
+// 1. We import 'protect' here
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.post('/register', register);
 router.post('/login', login);
-router.get('/me', authMiddleware, me);
-router.put('/me', authMiddleware, updateMe);
-router.post('/become-provider', authMiddleware, becomeProvider);
-router.get('/favorites', authMiddleware, myFavorites);
+
+// 2. We must USE 'protect' here (instead of 'authMiddleware')
+router.get('/me', protect, me);
+router.put('/me', protect, updateMe);
+router.post('/become-provider', protect, becomeProvider);
+router.get('/favorites', protect, myFavorites);
 
 export default router;
