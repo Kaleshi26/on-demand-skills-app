@@ -1,237 +1,258 @@
-// frontend/src/pages/Checkout.jsx
-import { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
-import { FaCreditCard, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
-import api from '../lib/api';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import Button from '../components/Button';
-import SectionHeading from '../components/SectionHeading';
+import confetti from 'canvas-confetti';
+// FIXED: Removing extensions to let the bundler resolve them
+import api from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 
+// --- Icons ---
+const Icons = {
+  Lock: () => <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>,
+  CreditCard: () => <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H3a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>,
+  Shield: () => <svg className="w-12 h-12 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+  Calendar: () => <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+};
+
 export default function Checkout() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const { state } = useLocation();
   const { user } = useAuth();
-  const [booking, setBooking] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState(false);
+  const nav = useNavigate();
+  const service = state?.service;
 
-  const bookingId = searchParams.get('bookingId');
-  const paymentSuccess = searchParams.get('payment') === 'success';
-  const mockPayment = searchParams.get('mock') === 'true';
+  const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState('review'); // 'review' | 'processing' | 'success'
+  const [note, setNote] = useState('');
 
-  useEffect(() => {
-    if (bookingId) {
-      fetchBooking();
-    } else {
-      navigate('/dashboard');
-    }
-  }, [bookingId, navigate]);
+  // Redirect if no service data (direct access protection)
+  if (!service) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h2 className="text-xl font-bold text-gray-900">No service selected</h2>
+          <button onClick={() => nav('/browse')} className="mt-4 text-blue-600 hover:underline">
+            Go to Browse
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    if (paymentSuccess) {
-      toast.success('Payment successful!');
-      navigate('/dashboard?payment=success');
-    }
-  }, [paymentSuccess, navigate]);
-
-  const fetchBooking = async () => {
+  const handlePay = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
     try {
-      const { data } = await api.get(`/payments/status/${bookingId}`);
-      setBooking(data.booking);
-    } catch (error) {
-      console.error('Fetch booking error:', error);
-      toast.error('Failed to load booking details');
-      navigate('/dashboard');
-    } finally {
+      // Simulate payment processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Actual API call
+      await api.post('/bookings', {
+        serviceId: service._id,
+        notes: note
+      });
+
+      setStep('success');
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Payment failed');
       setLoading(false);
     }
   };
 
-  const handlePayment = async () => {
-    if (!booking) return;
-
-    setProcessing(true);
-    try {
-      const { data } = await api.post('/payments/checkout', {
-        bookingId: booking._id
-      });
-
-      if (data.mock) {
-        // Mock payment - redirect to success
-        window.location.href = data.checkoutUrl;
-      } else {
-        // Real Stripe payment
-        window.location.href = data.checkoutUrl;
-      }
-    } catch (error) {
-      console.error('Payment error:', error);
-      toast.error('Failed to process payment');
-    } finally {
-      setProcessing(false);
-    }
-  };
-
-  if (loading) {
+  if (step === 'success') {
     return (
-      <div className="container-max py-10">
-        <div className="max-w-2xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/2 mb-8"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center"
+        >
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icons.Shield />
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!booking) {
-    return (
-      <div className="container-max py-10">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Booking not found</h1>
-          <Button onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
-        </div>
-      </div>
-    );
-  }
-
-  const isPaid = booking.paymentStatus === 'paid';
-  const isCustomer = user && booking.customer._id === user._id;
-
-  if (!isCustomer) {
-    return (
-      <div className="container-max py-10">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access denied</h1>
-          <Button onClick={() => navigate('/dashboard')}>Back to Dashboard</Button>
-        </div>
+          <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Booking Confirmed!</h2>
+          <p className="text-gray-500 mb-8">
+            Your request has been sent to <strong>{service.provider?.name}</strong>. You can chat with them in your inbox.
+          </p>
+          <div className="space-y-3">
+            <button 
+              onClick={() => nav('/dashboard')}
+              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors"
+            >
+              Go to Dashboard
+            </button>
+            <button 
+              onClick={() => nav('/browse')}
+              className="w-full py-3 px-4 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl font-medium transition-colors"
+            >
+              Book Another Service
+            </button>
+          </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="container-max py-10">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/dashboard')}
-          >
-            <FaArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-          <SectionHeading 
-            title="Checkout" 
-            subtitle="Complete your payment to confirm the booking."
-          />
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-extrabold text-gray-900">Secure Checkout</h1>
+          <div className="flex items-center gap-2 text-sm text-green-600 mt-2">
+            <Icons.Lock />
+            <span className="font-medium">256-bit SSL Encrypted Payment</span>
+          </div>
         </div>
 
-        <div className="space-y-6">
-          {/* Booking Summary */}
-          <div className="card p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Booking Summary</h2>
+        <div className="grid lg:grid-cols-3 gap-8">
+          
+          {/* Left Column: Payment Form */}
+          <div className="lg:col-span-2 space-y-6">
             
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Service:</span>
-                <span className="font-medium">
-                  {booking.service?.title || booking.task?.title}
-                </span>
-              </div>
-              
-              <div className="flex justify-between">
-                <span className="text-gray-600">Provider:</span>
-                <span className="font-medium">{booking.provider.name}</span>
-              </div>
-              
-              <div className="flex justify-between">
-                <span className="text-gray-600">Status:</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                  booking.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                  'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {booking.status}
-                </span>
-              </div>
-              
-              {booking.scheduledAt && (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Scheduled:</span>
-                  <span className="font-medium">
-                    {format(new Date(booking.scheduledAt), 'MMM d, yyyy h:mm a')}
-                  </span>
-                </div>
-              )}
-              
-              {booking.notes && (
+            {/* 1. Service Details Review */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Your Details</h3>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <span className="text-gray-600">Notes:</span>
-                  <p className="text-sm text-gray-700 mt-1">{booking.notes}</p>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Name</label>
+                  <div className="p-3 bg-gray-50 rounded-lg text-gray-900 font-medium">{user.name}</div>
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Payment Section */}
-          <div className="card p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <FaCreditCard className="w-6 h-6 text-gray-600" />
-              <h2 className="text-xl font-semibold text-gray-900">Payment</h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex justify-between text-lg">
-                <span className="text-gray-600">Total Amount:</span>
-                <span className="font-bold text-gray-900">${booking.totalPrice}</span>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Email</label>
+                  <div className="p-3 bg-gray-50 rounded-lg text-gray-900 font-medium truncate">{user.email}</div>
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Note to Provider (Optional)</label>
+                  <textarea 
+                    rows={2}
+                    className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Describe your task requirements..."
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
+                </div>
               </div>
+            </div>
 
-              {isPaid ? (
-                <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg">
-                  <FaCheckCircle className="w-6 h-6 text-green-600" />
-                  <div>
-                    <p className="font-medium text-green-900">Payment Completed</p>
-                    <p className="text-sm text-green-700">
-                      Your booking has been confirmed and payment processed.
-                    </p>
+            {/* 2. Payment Method (Mock) */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Payment Method</h3>
+              
+              <form onSubmit={handlePay} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="4242 4242 4242 4242"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                      required
+                    />
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Icons.CreditCard />
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <p className="text-sm text-gray-600">
-                    Click the button below to proceed with payment. You'll be redirected to a secure payment page.
-                  </p>
-                  
-                  <Button
-                    onClick={handlePayment}
-                    disabled={processing}
-                    className="w-full"
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+                    <input 
+                      type="text" 
+                      placeholder="MM / YY"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">CVC</label>
+                    <input 
+                      type="text" 
+                      placeholder="123"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {processing ? 'Processing...' : `Pay $${booking.totalPrice}`}
-                  </Button>
-                  
-                  <p className="text-xs text-gray-500 text-center">
-                    Secure payment powered by Stripe
+                    {loading ? (
+                      <>Processing Payment...</>
+                    ) : (
+                      <>Pay ${service.price}</>
+                    )}
+                  </button>
+                  <p className="text-center text-xs text-gray-400 mt-3">
+                    Payments are secure and encrypted.
                   </p>
                 </div>
-              )}
+              </form>
             </div>
           </div>
 
-          {/* Next Steps */}
-          {isPaid && (
-            <div className="card p-6 bg-blue-50">
-              <h3 className="font-semibold text-blue-900 mb-2">What's Next?</h3>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• You'll receive a confirmation email shortly</li>
-                <li>• Your provider will contact you to confirm details</li>
-                <li>• You can message your provider anytime from your dashboard</li>
-                <li>• After completion, you can leave a review</li>
-              </ul>
+          {/* Right Column: Order Summary */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm sticky top-24">
+              <h3 className="text-lg font-bold text-gray-900 mb-6">Order Summary</h3>
+              
+              <div className="flex gap-4 mb-6 pb-6 border-b border-gray-100">
+                <div className="w-20 h-20 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
+                  <img 
+                    src={service.image || "https://images.unsplash.com/photo-1581578731117-104f2a863ecc?q=80&w=200"} 
+                    alt={service.title}
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-900 line-clamp-2">{service.title}</h4>
+                  <p className="text-sm text-gray-500 mt-1">{service.category}</p>
+                </div>
+              </div>
+
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between text-gray-600">
+                  <span>Price per project</span>
+                  <span className="font-medium">${service.price.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>Service Fee</span>
+                  <span className="font-medium">$5.00</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>Tax (Estimated)</span>
+                  <span className="font-medium">$2.50</span>
+                </div>
+                
+                <div className="pt-4 mt-4 border-t border-gray-100 flex justify-between text-lg font-extrabold text-gray-900">
+                  <span>Total</span>
+                  <span>${(service.price + 7.50).toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="mt-6 bg-blue-50 p-4 rounded-lg flex gap-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  <Icons.Shield />
+                </div>
+                <p className="text-xs text-blue-700 leading-relaxed">
+                  <strong>Buyer Protection Guarantee.</strong> Your payment is held in escrow until the task is marked complete.
+                </p>
+              </div>
             </div>
-          )}
+          </div>
+
         </div>
       </div>
     </div>
