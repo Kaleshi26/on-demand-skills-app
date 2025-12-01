@@ -165,70 +165,70 @@ async function seedDatabase() {
         description: 'I provide complete house wiring, breaker upgrades, and fault fixing. Licensed electrician with safety certification.',
         category: 'Electrical',
         price: 2500,
-        image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=600'
+        image: 'https://picsum.photos/id/60/600/400' // Electrical tools
       },
       {
         title: 'IELTS Speaking & Writing Classes',
         description: 'Individual classes for students targeting band 7.0+. Online or physical classes in Kandy. Materials provided.',
         category: 'Tutoring',
         price: 3000,
-        image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=600'
+        image: 'https://picsum.photos/id/201/600/400' // Person studying
       },
       {
         title: 'Reliable Lorry for Moving (14ft)',
         description: '14 feet lorry available for hire. Experienced helpers included. We handle loading and unloading carefully.',
         category: 'Moving',
         price: 4500,
-        image: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=600'
+        image: 'https://picsum.photos/id/1073/600/400' // Moving truck
       },
       {
         title: 'Deep House Cleaning Service',
         description: 'Full house deep cleaning including bathrooms, kitchens, and windows. We use eco-friendly products.',
         category: 'Cleaning',
         price: 1500,
-        image: 'https://www.supercleaninglanka.com/image/furniture.jpeg'
+        image: 'https://picsum.photos/id/284/600/400' // Cleaning
       },
       {
         title: 'IKEA & Damro Furniture Assembly',
         description: 'Expert assembly for wardrobes, beds, and tables. I bring my own tools and ensure everything is stable.',
         category: 'Furniture Assembly',
         price: 2000,
-        image: 'https://furnitureassemblynyc.com/wp-content/uploads/2023/10/Is-IKEA-Furniture-Assembly-Easy.jpeg'
+        image: 'https://picsum.photos/id/96/600/400' // Furniture assembly
       },
       {
         title: 'Wedding Photography Package',
         description: 'Full day coverage with preshoot. High quality editing and digital album delivery within 2 weeks.',
         category: 'Photography',
         price: 85000,
-        image: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=600'
+        image: 'https://picsum.photos/id/250/600/400' // Photography
       },
       {
         title: 'Plumbing Repairs & Installation',
         description: 'Fixing leaks, installing taps, and bathroom fittings. Fast service for emergencies in Galle area.',
         category: 'Plumbing',
         price: 1500,
-        image: 'https://images.unsplash.com/photo-1505798577917-a65157d3320a?q=80&w=600'
+        image: 'https://picsum.photos/id/431/600/400' // Plumbing
       },
       {
         title: 'Laptop Repair & OS Installation',
         description: 'Screen replacement, battery changes, and Windows/Mac OS installation. Data recovery services available.',
         category: 'Handyman',
         price: 3500,
-        image: 'https://media.istockphoto.com/id/624750862/photo/laptop-disassembling-in-repair-shop-close-up.jpg?s=612x612&w=0&k=20&c=JBKojhArCFnDEIAtdHo1uXKsXqFSAk7Uk7zxJERdd70='
+        image: 'https://picsum.photos/id/119/600/400' // Laptop repair
       },
       {
         title: 'Garden Maintenance & Landscaping',
         description: 'Monthly garden maintenance packages available. Grass cutting, weeding, and planting.',
         category: 'Yardwork',
         price: 4000,
-        image: 'https://images.unsplash.com/photo-1558904541-efa843a96f01?q=80&w=600'
+        image: 'https://picsum.photos/id/152/600/400' // Gardening
       },
       {
         title: 'Dog Walking & Pet Sitting',
         description: 'Trustworthy pet care when you are away. Daily walks and feeding for dogs and cats.',
         category: 'Pet Care',
         price: 1000,
-        image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=600'
+        image: 'https://picsum.photos/id/200/600/400' // Pet care
       }
     ];
 
@@ -325,7 +325,7 @@ async function seedDatabase() {
         description: 'Need 5 social media posts designed for a clothing brand. Modern and minimalist style. I will provide the photos.',
         budget: 8000,
         category: 'Photography', // Close enough for demo
-        image: 'https://images.unsplash.com/photo-1626785774573-4b7993125651?q=80&w=600'
+        image: 'https://images.unsplash.com/photo-1662947852193-70b139587b96?w=600&auto=format&fit=crop'
       },
       {
         title: 'Sofa Cleaning Service',
