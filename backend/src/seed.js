@@ -186,14 +186,14 @@ async function seedDatabase() {
         description: 'Full house deep cleaning including bathrooms, kitchens, and windows. We use eco-friendly products.',
         category: 'Cleaning',
         price: 1500,
-        image: 'https://images.unsplash.com/photo-1581578731117-104f2a863ecc?q=80&w=600'
+        image: 'https://www.supercleaninglanka.com/image/furniture.jpeg'
       },
       {
         title: 'IKEA & Damro Furniture Assembly',
         description: 'Expert assembly for wardrobes, beds, and tables. I bring my own tools and ensure everything is stable.',
         category: 'Furniture Assembly',
         price: 2000,
-        image: 'https://images.unsplash.com/photo-1581539250439-c923cd277c80?q=80&w=600'
+        image: 'https://furnitureassemblynyc.com/wp-content/uploads/2023/10/Is-IKEA-Furniture-Assembly-Easy.jpeg'
       },
       {
         title: 'Wedding Photography Package',
@@ -214,7 +214,7 @@ async function seedDatabase() {
         description: 'Screen replacement, battery changes, and Windows/Mac OS installation. Data recovery services available.',
         category: 'Handyman',
         price: 3500,
-        image: 'https://images.unsplash.com/photo-1597872252721-24642f56f47b?q=80&w=600'
+        image: 'https://media.istockphoto.com/id/624750862/photo/laptop-disassembling-in-repair-shop-close-up.jpg?s=612x612&w=0&k=20&c=JBKojhArCFnDEIAtdHo1uXKsXqFSAk7Uk7zxJERdd70='
       },
       {
         title: 'Garden Maintenance & Landscaping',
